@@ -8,6 +8,7 @@ class Uplink
     @table = BASE_TABLE + @id
     @fwmark = BASE_FWMARK + @id
     @interface = config['interface']
+
     unless @interface
       puts 'Error: uplink interface not specified'
       exit 1
@@ -21,6 +22,7 @@ class Uplink
                 puts "Error: '#{config['type']}' is not a valid uplink type"
                 exit 1
             end
+
     @description = config['description']
     unless @description
       puts 'Error: uplink description not specified'
@@ -78,7 +80,9 @@ class Uplink
       sleep 0.1
       rand(3) > 0
     else
-      `ping -n -c 1 -W 2 -I #{@ip} #{ip_address}`
+      cmd = "ping -n -c 1 -W 2 -I #{@interface} #{ip_address}"
+      puts cmd if DEBUG
+      `#{cmd}`
       $?.to_i == 0
     end
   end
